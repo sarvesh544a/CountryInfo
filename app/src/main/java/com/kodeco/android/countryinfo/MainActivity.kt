@@ -3,8 +3,7 @@ package com.kodeco.android.countryinfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.kodeco.android.countryinfo.ui.countrylist.CountryInfoScreen
-import com.kodeco.android.countryinfo.ui.countrylist.CountryInfoScreen
+import com.kodeco.android.countryinfo.ui.countrylist.CountryListScreen
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +17,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 // TODO complete the composable content and provide
                 //  models for Country, CountryName, and CountryFlags.
-                CountryInfoScreen()
+                CountryListScreen()
             }
         }
     }
