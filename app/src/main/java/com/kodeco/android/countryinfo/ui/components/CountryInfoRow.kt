@@ -1,4 +1,4 @@
-package com.kodeco.android.countryinfo.ui.countrylist
+package com.kodeco.android.countryinfo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kodeco.android.countryinfo.model.Country
+import com.kodeco.android.countryinfo.model.CountryFlags
+import com.kodeco.android.countryinfo.model.CountryName
 
 
 @Composable
@@ -32,10 +34,15 @@ fun CountryInfoRow(country: Country) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CountryInfoRowPreview() {
-    // Preview function to display a preview of the CountryList
-
-    //CountryList(countries = countries)
+    val country = Country(
+        CountryName("United States"),
+        listOf("Washington D.C."),
+        331002651L,
+        9833515.0,
+        CountryFlags("https://example.com/us_flag.png")
+    )
+    CountryInfoRow(country = country)
 }
