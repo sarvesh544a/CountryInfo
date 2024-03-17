@@ -1,4 +1,4 @@
-package com.kodeco.android.countryinfo.ui.components
+package com.kodeco.android.countryinfo.ui.components.Loading
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
