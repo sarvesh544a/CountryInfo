@@ -1,8 +1,13 @@
 package com.kodeco.android.countryinfo
 
+import CountryInfoViewModel
+import CountryInfoViewModelFactory
+import CountryRepositoryImpl
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kodeco.android.countryinfo.network.CountryService
 import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoScreen
 import com.kodeco.android.countryinfo.ui.theme.MyApplicationTheme
@@ -12,6 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,9 +32,13 @@ class MainActivity : ComponentActivity() {
 
         val service: CountryService = retrofit.create(CountryService::class.java)
 
+        val countryRepository = CountryRepositoryImpl(service) // Initialize your CountryRepositoryImpl
+        val viewModelFactory = CountryInfoViewModelFactory(countryRepository) // Initialize ViewModelFactory
+        var viewModel = ViewModelProvider(this, viewModelFactory).get(CountryInfoViewModel::class.java) // Create ViewModel
+
         setContent {
             MyApplicationTheme {
-                CountryInfoScreen(service)
+                CountryInfoScreen(viewModel)
             }
         }
     }
