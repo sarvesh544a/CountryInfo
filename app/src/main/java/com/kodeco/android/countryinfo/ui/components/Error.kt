@@ -1,4 +1,4 @@
-package com.kodeco.android.countryinfo.ui.components.Error
+package com.kodeco.android.countryinfo.ui.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement

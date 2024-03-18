@@ -1,4 +1,4 @@
-package com.kodeco.android.countryinfo.ui.components.CountryInfoRow
+package com.kodeco.android.countryinfo.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

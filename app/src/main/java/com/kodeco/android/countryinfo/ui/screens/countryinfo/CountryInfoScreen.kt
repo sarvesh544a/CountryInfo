@@ -4,29 +4,19 @@ import CountryInfoViewModel
 import android.os.Parcelable
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.remember
 import com.kodeco.android.countryinfo.models.Country
-import com.kodeco.android.countryinfo.network.CountryService
-import com.kodeco.android.countryinfo.sample.sampleCountries
-import com.kodeco.android.countryinfo.ui.components.CountryInfoList.CountryInfoList
-import com.kodeco.android.countryinfo.ui.components.Error.Error
-import com.kodeco.android.countryinfo.ui.components.Loading.Loading
+import com.kodeco.android.countryinfo.ui.components.CountryInfoList
+import com.kodeco.android.countryinfo.ui.components.Error
+import com.kodeco.android.countryinfo.ui.components.Loading
 import kotlinx.parcelize.Parcelize
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 
 @Parcelize
 sealed class CountryInfoState : Parcelable {
-    data object Loading : CountryInfoState()
+    data class Loading(val uptimeCounter: Int) : CountryInfoState()
     data class Success(val countries: List<Country>) : CountryInfoState()
     data class Error(val error: Throwable) : CountryInfoState()
 }
@@ -37,12 +27,18 @@ fun CountryInfoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // Create mutable state variables for tapCounter and backCounter
+    var tapCounter = remember { mutableStateOf(0) }
+    val backCounter = remember { mutableStateOf(0) }
+
     Surface {
         when (val curState = uiState) {
-            is CountryInfoState.Loading -> Loading()
+            is CountryInfoState.Loading -> Loading(curState.uptimeCounter)
             is CountryInfoState.Success -> CountryInfoList(
                 countries = curState.countries,
-                onRefreshClick = { viewModel.refreshData() } // Trigger refreshData() on button click
+                onRefreshClick = { viewModel.refreshData() },
+                tapCounter = tapCounter,
+                backCounter = backCounter
             )
             is CountryInfoState.Error -> Error(curState.error) {
                 // Handling retry action, you can leave this empty for now

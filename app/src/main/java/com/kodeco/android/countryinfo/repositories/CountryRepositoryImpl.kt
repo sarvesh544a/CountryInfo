@@ -9,37 +9,15 @@ import kotlinx.coroutines.flow.flow
 
 class CountryRepositoryImpl(private val service: CountryService) : CountryRepository {
 
-    // Simulated list of countries
-    private val countriesList = listOf(
-        Country(
-            name = CountryName("USA"),
-            capital = listOf("Washington"),
-            population = 328_200_000,
-            area = 9_833_520f,
-            flags = CountryFlags(png = "usa.png", svg = "usa.svg")
-        ),
-        Country(
-            name = CountryName("Canada"),
-            capital = listOf("Ottawa"),
-            population = 37_600_000,
-            area = 9_984_670f,
-            flags = CountryFlags(png = "canada.png", svg = "canada.svg")
-        ),
-        Country(
-            name = CountryName("Australia"),
-            capital = listOf("Canberra"),
-            population = 25_500_000,
-            area = 7_692_024f,
-            flags = CountryFlags(png = "australia.png", svg = "australia.svg")
-        )
-    )
+    private var countriesList: List<Country> = emptyList()
 
-    override fun fetchCountries(): Flow<CountryInfoState> {
+    override fun fetchCountries(uptimeCounter: Int): Flow<CountryInfoState> {
         return flow {
-            emit(CountryInfoState.Loading)
+            emit(CountryInfoState.Loading(uptimeCounter))
             delay(1_000) // Simulate delay
             val countriesResponse = service.getAllCountries()
             val newState = if (countriesResponse.isSuccessful) {
+                countriesList = countriesResponse.body()!!
                 CountryInfoState.Success(countriesResponse.body()!!)
             } else {
                 CountryInfoState.Error(Throwable("Request failed: ${countriesResponse.message()}"))
@@ -49,6 +27,6 @@ class CountryRepositoryImpl(private val service: CountryService) : CountryReposi
     }
 
     override suspend fun getCountry(uniqueId: String): Country? {
-        return TODO("Provide the return value")
+        return countriesList.find { it.name == CountryName(uniqueId) }
     }
 }

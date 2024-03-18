@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface CountryRepository {
-    fun fetchCountries(): Flow<CountryInfoState>
+    fun fetchCountries(uptimeCounter: Int): Flow<CountryInfoState>
     suspend fun getCountry(uniqueId: String): Country?
 }
