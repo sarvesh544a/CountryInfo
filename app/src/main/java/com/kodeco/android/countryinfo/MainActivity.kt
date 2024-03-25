@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kodeco.android.countryinfo.nav.CountryInfoNavHost
 import com.kodeco.android.countryinfo.network.CountryService
 import com.kodeco.android.countryinfo.repositories.CountryRepositoryImpl
 import com.kodeco.android.countryinfo.ui.screens.countryinfo.CountryInfoScreen
@@ -28,17 +29,15 @@ class MainActivity : ComponentActivity() {
             .build()
 
         val service: CountryService = retrofit.create(CountryService::class.java)
+        val repository = CountryRepositoryImpl(service) // Create repository instance
 
-setContent {
-    MyApplicationTheme {
-        CountryInfoScreen(
-            viewModel = viewModel(
-                factory = CountryInfoViewModel.CountryInfoViewModelFactory(
-                    repository = CountryRepositoryImpl(service),
-                ),
-            ),
-        )
+        setContent {
+            MyApplicationTheme {
+                // Replace CountryInfoScreen with CountryInfoNavHost
+                CountryInfoNavHost(repository = repository)
+            }
+        }
+
     }
 }
-    }
-}
+
