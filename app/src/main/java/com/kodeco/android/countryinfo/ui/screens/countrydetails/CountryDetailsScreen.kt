@@ -21,14 +21,20 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kodeco.android.countryinfo.models.Country
+import com.kodeco.android.countryinfo.models.CountryFlags
+import com.kodeco.android.countryinfo.models.CountryName
+import com.kodeco.android.countryinfo.repositories.CountryRepository
 import com.kodeco.android.countryinfo.sample.sampleCountry
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryDetailsScreen(
-    country: Country,
+    viewModel: CountryDetailsViewModel,
     onNavigateUp: () -> Unit,
 ) {
+    val country = viewModel.country
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -52,7 +58,7 @@ fun CountryDetailsScreen(
             item { Text(text = "Capital: ${country.mainCapital}") }
             item { Text(text = "Population: ${country.population}") }
             item { Text(text = "Area: ${country.area}") }
-            item { 
+            item {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(country.flagUrl)
@@ -67,11 +73,19 @@ fun CountryDetailsScreen(
     }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun CountryDetailsScreenPreview() {
-    CountryDetailsScreen(
-        country = sampleCountry,
-        onNavigateUp = {},
-    )
+    val mockRepository = object : CountryRepository {
+        override suspend fun fetchCountries(): Flow<List<Country>> {
+            TODO("Not yet implemented")
+        }
+        override fun getCountry(countryId: Int): Country? {
+            return sampleCountry
+        }
+    }
+    val viewModel = CountryDetailsViewModel(countryId = 1, repository = mockRepository)
+    val onNavigateUp: () -> Unit = {}
+    CountryDetailsScreen(viewModel = viewModel, onNavigateUp = onNavigateUp)
 }

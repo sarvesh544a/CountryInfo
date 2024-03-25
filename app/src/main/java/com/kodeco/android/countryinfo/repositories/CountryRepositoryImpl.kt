@@ -12,7 +12,7 @@ class CountryRepositoryImpl(
 
     private var countries = mutableListOf<Country>()
 
-    override fun fetchCountries(): Flow<List<Country>> = flow {
+    override suspend fun fetchCountries(): Flow<List<Country>> = flow {
         delay(1_000) // Added for displaying the uptime longer on the loading screen.
         val countriesResponse = service.getAllCountries()
 
@@ -28,7 +28,7 @@ class CountryRepositoryImpl(
         emit(countries)
     }
 
-    override fun getCountry(index: Int): Country? {
-        return countries.getOrNull(index)
+    override fun getCountry(countryId: Int): Country? {
+        return countries.getOrNull(countryId)
     }
 }
